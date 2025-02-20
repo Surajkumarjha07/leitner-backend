@@ -8,28 +8,33 @@ async function handleLeitnerSystem(req, res) {
         const card = await flashCards.findOne({ id, userId });
 
         if (card) {
-            let newDaysLeft = card.daysLeftToReview;
+            let newDays = card.daysLeftToReview;
             let newBox = card.box;
+            let right;
 
             if (text === "Got it right") {
-                newDaysLeft = Math.min(25, newDaysLeft + 5);
-                newBox = Math.min(5, newBox + 1);
-            } else {
-                newDaysLeft = Math.max(5, newDaysLeft - 5);
-                newBox = Math.max(1, newBox - 1);
+                newDays = Math.min(25, card.daysLeftToReview + 5);
+                newBox = Math.min(5, parseInt(card.box) + 1);
+                right = true;
+            }
+            else {
+                newDays = Math.max(5, card.daysLeftToReview - 5);
+                newBox = Math.max(1, parseInt(card.box) - 1);
+                right = false;
             }
 
-            await flashCards.updateOne({ id, userId }, {
-                $set: { daysLeftToReview: newDaysLeft, box: newBox }
-            });
-
-            return res.status(200).json({
-                message: text === "Got it right" ? "You are progressing!" : "Your progress is degraded!"
-            });
+            const newCard = await flashCards.updateOne({ id, userId }, { $set: { daysLeftToReview: newDays, box: newBox } });
+            
+            res.status(200).json({
+                right,
+                newCard
+            })
+            return;
         }
 
-        return res.status(404).json({ message: "Card not found!" });
-
+        return res.status(404).json({
+            message: "card not found!"
+        })
 
     } catch (error) {
         console.log("Some Error Occured", error);
