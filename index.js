@@ -34,9 +34,9 @@ app.use("/signUp", signUp);
 app.use("/logIn", logIn);
 app.use("/flashcards", authenticate, createFlashCard);
 app.use("/flashcards", authenticate, getCards);
-app.use("/flashcards/:cardId", authenticate, handleUpdateCard);
-app.delete("/flashcards/:cardId", authenticate, handleDeleteCard)
-app.use("/leitnerSystem", authenticate, leitnersystem)
+app.put("/flashcards/:cardId", authenticate, handleUpdateCard);
+app.delete("/flashcards/:cardId", authenticate, handleDeleteCard);
+app.use("/leitnerSystem", authenticate, leitnersystem);
 
 const PORT = process.env.PORT;
 
