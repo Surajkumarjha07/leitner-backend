@@ -4,7 +4,7 @@ const flashCards = require("../models/flashCardModel");
 async function handleGetCards(req, res) {
     try {
         const { userId } = req.user;
-        const allCards = await flashCards.find({ userId });
+        const allCards = await flashCards.find({ userId, daysLeftToReview: 0 });
         res.status(200).json({
             message: "all cards fetched",
             allCards

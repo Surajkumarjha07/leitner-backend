@@ -23,11 +23,10 @@ async function handleLeitnerSystem(req, res) {
                 right = false;
             }
 
-            const newCard = await flashCards.updateOne({ id, userId }, { $set: { daysLeftToReview: newDays, box: newBox } });
-            
+            await flashCards.updateOne({ id, userId }, { $set: { daysLeftToReview: newDays, box: newBox } });
+
             res.status(200).json({
                 right,
-                newCard
             })
             return;
         }
