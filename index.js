@@ -12,7 +12,6 @@ const authenticate = require("./middlewares/authenticate");
 const handleUpdateCard = require("./controllers/updateCard");
 const leitnersystem = require("./routes/leitnerSystem")
 const cron = require("node-cron");
-const flashCards = require("./models/flashCardModel");
 const reduceDays = require("./controllers/reduceDays");
 
 const corsOptions = {
@@ -40,7 +39,6 @@ app.use("/flashcards", authenticate, getCards);
 app.put("/flashcards/:cardId", authenticate, handleUpdateCard);
 app.delete("/flashcards/:cardId", authenticate, handleDeleteCard);
 app.use("/leitnerSystem", authenticate, leitnersystem);
-app.get("/reduce", reduceDays)
 
 cron.schedule('*/10 * * * * *', async () => {
     await reduceDays();
